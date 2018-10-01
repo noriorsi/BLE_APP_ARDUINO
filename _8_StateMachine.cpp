@@ -10,6 +10,7 @@ event_enum event = NO_EVENT;
 
 unsigned DEBUG_active = false;
 unsigned DEBUG_receive = false;
+unsigned parametric_active = false;
 unsigned no_stop_when_timeout = false;
 
 unsigned long current_state_time = 0;
@@ -140,7 +141,8 @@ state_enum Sleep_Event_Handler(void){
 Handles the serial timeout
 ***************************************************/
 state_enum Serial_Timeout_Event_Handler(void){
-  if(TEST) {RFduinoBLE.sendInt(85);delay(DELAY_BEFORE_SENDING_COMMAND);}
+  if(TEST) {RFduinoBLE.sendInt(85);
+  delay(DELAY_BEFORE_SENDING_COMMAND);}
   if(event==SERIAL_TIMEOUT_EVENT) event = STOP_EVENT;
 
   if(no_stop_when_timeout){//If no_stop_when_timeout don't send a stop command
@@ -194,6 +196,8 @@ Starts Mode1
 state_enum StartM1_Event_Handler(void){
   //if(state == DEBUG_STATE) RFduinoGZLL.sendToHost("DEVICE: Start mode1 event\n\r");
   //RFduinoGZLL.sendToHost(CMD[CMD_ACK]);
+   no_stop_when_timeout = true;
+  parametric_active = true;
   delay(DELAY_BEFORE_SENDING_COMMAND);
   if(TEST) {RFduinoBLE.sendInt(87);delay(DELAY_BEFORE_SENDING_COMMAND);}
   digitalWrite(LED2, HIGH);
@@ -209,6 +213,7 @@ Starts Mode2
 ***************************************************/
 state_enum StartM2_Event_Handler(void){
   no_stop_when_timeout = true;
+   parametric_active = true; //engine_room specific application
  // RFduinoBLE.send(CMD[CMD_ACK]);
   if(TEST) {RFduinoBLE.sendInt(88);delay(DELAY_BEFORE_SENDING_COMMAND);}
   digitalWrite(LED2, HIGH);

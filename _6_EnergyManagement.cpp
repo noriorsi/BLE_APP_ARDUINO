@@ -30,7 +30,7 @@ void DeepSleepDelay(uint64_t ms){
   Serial.end();
   //RFduinoBLE.end();
   
-  //RFduino_ULPDelay(ms);
+  RFduino_ULPDelay(ms);
 
   // Re-Enable the Serial and the Wire
   //NRF_TWI1->ENABLE = (TWI_ENABLE_ENABLE_Enabled << TWI_ENABLE_ENABLE_Pos);

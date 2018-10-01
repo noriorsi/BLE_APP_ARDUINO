@@ -10,6 +10,9 @@ char T_buffer[36] = {'x','x','x','x','x','x', 'x', 'x', 'x','x', 'x', 'x', 'x','
 int T_buffer_index = 0;
 int T_buffer_size = 0;
 bool T_buffer_flag = false;
+char T_buffer1[12] = {'x','x','x','x','x','x', 'x', 'x', 'x','x', 'x', 'x'}; //, 'x','x','x','x','x','x', 'x', 'x', 'x','x', 'x', 'x', 'x','x','x','x','x','x', 'x', 'x', 'x','x', 'x', 'x'};
+int T_buffer1_index = 0;
+int T_buffer1_size = 0;
 char T_buffer2[12] = {'x','x','x','x','x','x', 'x', 'x', 'x','x', 'x', 'x'}; //, 'x','x','x','x','x','x', 'x', 'x', 'x','x', 'x', 'x', 'x','x','x','x','x','x', 'x', 'x', 'x','x', 'x', 'x'};
 int T_buffer2_index = 0;
 int T_buffer2_size = 0;
@@ -19,6 +22,15 @@ int T_buffer3_size = 0;
 char T_buffer4[12] = {'x','x','x','x','x','x', 'x', 'x', 'x','x', 'x', 'x'};
 int T_buffer4_index = 0;
 int T_buffer4_size = 0;
+char T_buffer5[12] = {'x','x','x','x','x','x', 'x', 'x', 'x','x', 'x', 'x'}; //, 'x','x','x','x','x','x', 'x', 'x', 'x','x', 'x', 'x', 'x','x','x','x','x','x', 'x', 'x', 'x','x', 'x', 'x'};
+int T_buffer5_index = 0;
+int T_buffer5_size = 0;
+char T_buffer6[12] = {'x','x','x','x','x','x', 'x', 'x', 'x','x', 'x', 'x'}; //, 'x','x','x','x','x','x', 'x', 'x', 'x','x', 'x', 'x', 'x','x','x','x','x','x', 'x', 'x', 'x','x', 'x', 'x'};
+int T_buffer6_index = 0;
+int T_buffer6_size = 0;
+char T_buffer7[12] = {'x','x','x','x','x','x', 'x', 'x', 'x','x', 'x', 'x'}; //, 'x','x','x','x','x','x', 'x', 'x', 'x','x', 'x', 'x', 'x','x','x','x','x','x', 'x', 'x', 'x','x', 'x', 'x'};
+int T_buffer7_index = 0;
+int T_buffer7_size = 0;
 int B2cntr = 0;
 bool T_buffer2_flag_send = false;
 bool T_buffer2_flag_reset = false;
@@ -280,22 +292,47 @@ void serialEvent(void){
         {
           case 0:
           {
+            T_buffer1[T_buffer1_index] = ch;
+            T_buffer1_index++;
+            break;
+          }
+          case 1:
+          {
             T_buffer2[T_buffer2_index] = ch;
             T_buffer2_index++;
             break;
           }
-          case 1:
+          case 2:
           {
             T_buffer3[T_buffer3_index] = ch;
             T_buffer3_index++;
             break;
           }
-          case 2:
+          case 3:
           {
             T_buffer4[T_buffer4_index] = ch;
             T_buffer4_index++;
             break;
           }
+          case 4:
+          {
+            T_buffer5[T_buffer5_index] = ch;
+            T_buffer5_index++;
+            break;
+          }
+          case 5:
+          {
+            T_buffer6[T_buffer6_index] = ch;
+            T_buffer6_index++;
+            break;
+          }
+          case 6:
+          {
+            T_buffer7[T_buffer7_index] = ch;
+            T_buffer7_index++;
+            break;
+          }
+          
           /*case 3:
           {
             T_buffer2_flag_send = true;
@@ -313,15 +350,23 @@ void serialEvent(void){
       else
       {
         B2cntr++;
-        if(B2cntr >=3){
+        if(B2cntr >= 7){
           T_buffer2_flag_send = true;
-            T_buffer2_size = T_buffer2_index;
-            T_buffer3_size = T_buffer3_index;
-            T_buffer4_size = T_buffer4_index;
-            T_buffer2_index = 0;
-            T_buffer3_index = 0;
-            T_buffer4_index = 0;
-            B2cntr = 0;
+          T_buffer1_size = T_buffer1_index;
+          T_buffer2_size = T_buffer2_index;
+          T_buffer3_size = T_buffer3_index;
+          T_buffer4_size = T_buffer4_index;
+          T_buffer5_size = T_buffer5_index;
+          T_buffer6_size = T_buffer6_index;
+          T_buffer7_size = T_buffer7_index;
+          T_buffer1_index = 0;
+          T_buffer2_index = 0;
+          T_buffer3_index = 0;
+          T_buffer4_index = 0;
+          T_buffer5_index = 0;
+          T_buffer6_index = 0;
+          T_buffer7_index = 0;
+          B2cntr = 0;
         }
       }
 /*
@@ -459,6 +504,12 @@ void SendBuffer_(){
   //RFduinoBLE.send(T_buffer, 36);
   if(T_buffer2_flag_send)
   {
+    RFduinoBLE.send(T_buffer1, T_buffer1_size);
+    //T_buffer2_flag_send = false;
+    for(int idx = 0; idx < 12; ++idx)
+    {
+      T_buffer1[idx] = 'x';
+    }
     RFduinoBLE.send(T_buffer2, T_buffer2_size);
     //T_buffer2_flag_send = false;
     for(int idx = 0; idx < 12; ++idx)
@@ -474,10 +525,28 @@ void SendBuffer_(){
     }
     delay(100);
     RFduinoBLE.send(T_buffer4, T_buffer4_size);
-    T_buffer2_flag_send = false;
+    //T_buffer2_flag_send = false;
     for(int idx = 0; idx < 12; ++idx)
     {
       T_buffer4[idx] = 'x';
+    }
+    RFduinoBLE.send(T_buffer5, T_buffer5_size);
+    //T_buffer2_flag_send = false;
+    for(int idx = 0; idx < 12; ++idx)
+    {
+      T_buffer5[idx] = 'x';
+    }
+    RFduinoBLE.send(T_buffer6, T_buffer6_size);
+    //T_buffer2_flag_send = false;
+    for(int idx = 0; idx < 12; ++idx)
+    {
+      T_buffer6[idx] = 'x';
+    }
+    RFduinoBLE.send(T_buffer7, T_buffer7_size);
+    T_buffer2_flag_send = false;
+    for(int idx = 0; idx < 12; ++idx)
+    {
+      T_buffer7[idx] = 'x';
     }
     
   }
